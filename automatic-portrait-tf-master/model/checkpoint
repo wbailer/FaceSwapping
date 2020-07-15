@@ -1,0 +1,6 @@
+model_checkpoint_path: "PortraitFCN-100000"
+all_model_checkpoint_paths: "PortraitFCN-98000"
+all_model_checkpoint_paths: "PortraitFCN-98500"
+all_model_checkpoint_paths: "PortraitFCN-99000"
+all_model_checkpoint_paths: "PortraitFCN-99500"
+all_model_checkpoint_paths: "PortraitFCN-100000"

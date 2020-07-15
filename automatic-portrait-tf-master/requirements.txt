@@ -1,0 +1,5 @@
+Pillow
+requests
+tensorflow-gpu==1.6
+numpy
+scipy
