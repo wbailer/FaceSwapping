@@ -6,12 +6,40 @@ from glob import glob
 import tensorflow as tf
 import numpy as np
 from six.moves import xrange
+import cv2
 
 from ops import *
 from utils import *
 
 def conv_out_size_same(size, stride):
   return int(math.ceil(float(size) / float(stride)))
+
+def face_det(images, bsize, weight):
+  imgvec = np.ones([bsize, 1], np.float32)
+  imageMatrix = inverse_transform(images)
+  #print("inputs shape ",images.shape, "  ",type(images))
+  mergedImage = np.squeeze(merge(imageMatrix, image_manifold_size(images.shape[0])))
+  #scipy.misc.imsave("temp.jpg", mergedImage)
+  mergedImage = np.multiply(mergedImage,255.0)
+  mergedImage = mergedImage.astype(np.ubyte)
+  #scipy.misc.imsave("temp2.jpg", mergedImage)
+
+  gray_img = cv2.cvtColor(mergedImage, cv2.COLOR_BGR2GRAY)
+ 
+  haar_face_cascade = cv2.CascadeClassifier('mnt/haarcascade_frontalface_alt.xml')
+
+  faces = haar_face_cascade.detectMultiScale3(gray_img, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30),   flags = cv2.CASCADE_SCALE_IMAGE, outputRejectLevels = True)
+
+  rects = faces[0]
+  neighbours = faces[1]
+  weights = faces[2] 
+
+
+  #return np.multiply(imgvec,(1.0 - len(faces[0]) / ((1.0)*bsize)))
+  fdet_loss = weight * (1.0 - len(faces[0]) / ((1.0)*bsize))
+  #print("face det loss ",fdet_loss)
+  return fdet_loss
+
 
 class DCGAN(object):
   def __init__(self, sess, input_height=108, input_width=108, crop=True,
@@ -86,10 +114,10 @@ class DCGAN(object):
       else:
         self.c_dim = 1
 
+      if len(self.data) < self.batch_size:
+        raise Exception("[!] Entire dataset size is less than the configured batch_size")
+    
     self.grayscale = (self.c_dim == 1)
-
-    if len(self.data) < self.batch_size:
-      raise Exception("[!] Entire dataset size is less than the configured batch_size")
 
     self.build_model()
 
@@ -122,6 +150,8 @@ class DCGAN(object):
     self.d__sum = histogram_summary("d_", self.D_)
     self.G_sum = image_summary("G", self.G)
 
+    self.det_loss = tf.placeholder(tf.float32,(), name='fdet_loss')
+
     def sigmoid_cross_entropy_with_logits(x, y):
       try:
         return tf.nn.sigmoid_cross_entropy_with_logits(logits=x, labels=y)
@@ -138,7 +168,7 @@ class DCGAN(object):
     self.d_loss_real_sum = scalar_summary("d_loss_real", self.d_loss_real)
     self.d_loss_fake_sum = scalar_summary("d_loss_fake", self.d_loss_fake)
                           
-    self.d_loss = self.d_loss_real + self.d_loss_fake
+    self.d_loss = self.d_loss_real + self.d_loss_fake + self.det_loss
 
     self.g_loss_sum = scalar_summary("g_loss", self.g_loss)
     self.d_loss_sum = scalar_summary("d_loss", self.d_loss)
@@ -203,7 +233,7 @@ class DCGAN(object):
           config.data_dir, config.dataset, self.input_fname_pattern))
         np.random.shuffle(self.data)
         batch_idxs = min(len(self.data), config.train_size) // config.batch_size
-
+ 
       for idx in xrange(0, int(batch_idxs)):
         if config.dataset == 'mnist':
           batch_images = self.data_X[idx*config.batch_size:(idx+1)*config.batch_size]
@@ -262,10 +292,36 @@ class DCGAN(object):
               self.y: batch_labels
           })
         else:
+	  # get samples
+          samples, d_loss, g_loss = self.sess.run(
+              [self.sampler, self.d_loss, self.g_loss],
+                 feed_dict={
+                    self.z: sample_z,
+                    self.inputs: sample_inputs,
+                    self.det_loss: 0.0
+                 },
+              )
+          
+
+          # do face detection
+          fdet_loss = face_det(samples,self.batch_size,1.0)
+ 
+          #print("det loss ",fdet_loss)
+
           # Update D network
           _, summary_str = self.sess.run([d_optim, self.d_sum],
-            feed_dict={ self.inputs: batch_images, self.z: batch_z })
+            feed_dict={ 
+                 self.inputs: batch_images, 
+                 self.z: batch_z,
+                 self.det_loss: fdet_loss 
+            })
           self.writer.add_summary(summary_str, counter)
+
+          # detection
+          #_, summary_str = self.sess.run([self.det, self.det_sum],
+          #  feed_dict={ self.inputs: batch_images, self.z: batch_z })
+          #self.writer.add_summary(summary_str, counter)
+
 
           # Update G network
           _, summary_str = self.sess.run([g_optim, self.g_sum],
@@ -279,12 +335,15 @@ class DCGAN(object):
           
           errD_fake = self.d_loss_fake.eval({ self.z: batch_z })
           errD_real = self.d_loss_real.eval({ self.inputs: batch_images })
+          errD_det = self.det_loss.eval({ self.det_loss: fdet_loss })
           errG = self.g_loss.eval({self.z: batch_z})
+
+          #print("done upd", self.d_loss_sum)
 
         counter += 1
         print("Epoch: [%2d/%2d] [%4d/%4d] time: %4.4f, d_loss: %.8f, g_loss: %.8f" \
           % (epoch, config.epoch, idx, batch_idxs,
-            time.time() - start_time, errD_fake+errD_real, errG))
+            time.time() - start_time, errD_fake+errD_real+errD_det, errG))
 
         if np.mod(counter, 100) == 1:
           if config.dataset == 'mnist':
@@ -306,6 +365,7 @@ class DCGAN(object):
                 feed_dict={
                     self.z: sample_z,
                     self.inputs: sample_inputs,
+                    self.det_loss: 0.0
                 },
               )
               save_images(samples, image_manifold_size(samples.shape[0]),
@@ -347,6 +407,18 @@ class DCGAN(object):
         h3 = linear(h2, 1, 'd_h3_lin')
         
         return tf.nn.sigmoid(h3), h3
+
+  #def detector(self, image, y=None):
+    #with tf.variable_scope("detector") as scope:
+      #imgvec = tf.ones([self.batch_size, 1], tf.float32)
+      #imageMatrix = inverse_transform(imageArray)
+      #print("inputs shape ",imageArray.shape, "  ",type(imageArray))
+      #mergedImage = np.squeeze(merge(imageMatrix, imageArray.shape[0]))
+      #scipy.misc.imsave("temp.jpg", mergedImage)
+      #
+      #return tf.multiply(imgvec,(1.0 - 64 / ((1.0)*self.batch_size)))
+
+
 
   def generator(self, z, y=None):
     with tf.variable_scope("generator") as scope:
