@@ -1,5 +1,4 @@
 #include "FaceSwapper/FaceSwapping.h"
-#include "JrsDlibBase/dlib/ipl_image_hull.h"
 
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/objdetect/objdetect.hpp>
@@ -13,9 +12,8 @@
 
 #include <iostream>
 
-#include <IplBase/OCV/Ipl.h>
 
-#include "IplAlg/Visual.h"
+#include "dlib/ipl_image_hull.h"
 
 using namespace cv;
 
@@ -44,7 +42,7 @@ FaceSwapping::~FaceSwapping() {
 
 }
 
-void FaceSwapping::swapFaces(IplImage* src, IplImage* dst, IplImage* faceSet, DetectionRegion* srcRegion, DetectionRegion* fsRegion)
+void FaceSwapping::swapFaces(cv::Mat src, cv::Mat dst, cv::Mat faceSet, DetectionRegion* srcRegion, DetectionRegion* fsRegion)
 {
 	if (triangulation) {
 		swapFacesTriangulated(src, dst, faceSet, srcRegion, fsRegion);
@@ -55,7 +53,7 @@ void FaceSwapping::swapFaces(IplImage* src, IplImage* dst, IplImage* faceSet, De
 }
 
 
-void FaceSwapping::swapFacesAffine(IplImage* src, IplImage* dst, IplImage* faceSet, DetectionRegion* srcRegion, DetectionRegion* fsRegion)
+void FaceSwapping::swapFacesAffine(cv::Mat src, cv::Mat dst, cv::Mat faceSet, DetectionRegion* srcRegion, DetectionRegion* fsRegion)
 {
 	
 	cv::Point2i* srcPoints = new cv::Point2i[9];
@@ -74,19 +72,16 @@ void FaceSwapping::swapFacesAffine(IplImage* src, IplImage* dst, IplImage* faceS
 
 	cv::Mat trafoMatrix = cv::getAffineTransform(fsTransformPoints, srcTransformPoints);
 
-	IplImage* maskImage = Jrs::Ipl::Factory::createImageLike(src, 1, 8, true, false);
-	iplSet(maskImage, 0);
+	cv::Mat mask =  cv::Mat(src.rows, src.cols, CV_8UC1);
+	mask = Scalar(0);
 
-	IplImage* warpedFaceImage = Jrs::Ipl::Factory::createImageLike(src, 3, 8, true, false);
+	cv::Mat warpedFaceImage = src.clone();
 
-	getWarpedMaskandFace(srcPoints, fsPoints, trafoMatrix, faceSet, maskImage, warpedFaceImage);
+	getWarpedMaskandFace(srcPoints, fsPoints, trafoMatrix, faceSet, mask, warpedFaceImage);
 	
-	colorCorrect(src, warpedFaceImage, maskImage, srcRegion);
+	colorCorrect(src, warpedFaceImage, mask, srcRegion);
 
-	insertFaces(dst, warpedFaceImage, maskImage, srcFeather);
-
-	Jrs::Ipl::Factory::deleteImage(maskImage);
-	Jrs::Ipl::Factory::deleteImage(warpedFaceImage);
+	insertFaces(dst, warpedFaceImage, mask, srcFeather);
 }
 
 const cv::Point2i FaceSwapping::getPoint(dlib::full_object_detection& shape, int part_index)
@@ -95,14 +90,14 @@ const cv::Point2i FaceSwapping::getPoint(dlib::full_object_detection& shape, int
 	return cv::Point2i(p.x(), p.y());
 };
 
-void FaceSwapping::getLandmarks(IplImage* img, DetectionRegion* dr, cv::Point2i* points, cv::Point2f* affine_transform_keypoints, cv::Size& feather_amount) {
+void FaceSwapping::getLandmarks(cv::Mat img, DetectionRegion* dr, cv::Point2i* points, cv::Point2f* affine_transform_keypoints, cv::Size& feather_amount) {
 	float x, y, w, h;
 	dr->getBoundingBox(x, y, w, h);
 	dlib::rectangle rect = dlib::rectangle(x,y,x+w,y+h);
 
+	IplImage iplImg = img;
 
-
-	dlib::ipl_image_hull<dlib::rgb_pixel> dlibimg(img);
+	dlib::ipl_image_hull<dlib::rgb_pixel> dlibimg(&iplImg);
 
 	dlib::full_object_detection shape = shapepred(dlibimg, rect);
 
@@ -125,78 +120,33 @@ void FaceSwapping::getLandmarks(IplImage* img, DetectionRegion* dr, cv::Point2i*
 	feather_amount.width = feather_amount.height = (int)cv::norm(points[0] - points[6]) / 8;
 }
 
-void FaceSwapping::drawPoints(IplImage* img, cv::Point2i* points, std::string imgname, DetectionRegion* dr) {
-	IplImage* imgRGB = Jrs::Ipl::Factory::cloneImage(img);
-	Jrs::Ipl::reverseChannelSequenceOrigin(imgRGB, true, false, true);
 
-	for (int k=0;k<9;k++) {
-
-		for (int j = points[k].x - 2; j<points[k].x + 2; j++) {	
-			for (int i = points[k].y-2; i<points[k].y + 2; i++) {
-				imgRGB->imageData[(i*imgRGB->widthStep) + j* 3] = 255;
-			}
-		}
-	}
-
-	float x, y, w, h;
-	dr->getBoundingBox(x, y, w, h);
-
-	for (int i = y; i < y + h; i++) {
-		int j = x;
-		imgRGB->imageData[(i*imgRGB->widthStep) + j * 3 +2] = 255;
-		j = x + w;
-		imgRGB->imageData[(i*imgRGB->widthStep) + j * 3 + 2] = 255;
-	}
-	for (int j = x; j< x + w; j++) {
-		int i = y;
-		imgRGB->imageData[(i*imgRGB->widthStep) + j * 3 + 2] = 255;
-		i = y + h;
-		imgRGB->imageData[(i*imgRGB->widthStep) + j * 3 + 2] = 255;
-	}
-
-	Jrs::Ipl::Visual::saveImage(imgRGB, imgname);
-
-	Jrs::Ipl::Factory::deleteImage(imgRGB);
-
-}
-	
-
-void FaceSwapping::getWarpedMaskandFace(cv::Point2i* srcPoints, cv::Point2i* fsPoints, cv::Mat& trafo, IplImage* fsImage, IplImage* maskImage, IplImage* warpedFaceImage) {
+void FaceSwapping::getWarpedMaskandFace(cv::Point2i* srcPoints, cv::Point2i* fsPoints, cv::Mat& trafo, cv::Mat fsImage, cv::Mat maskImage, cv::Mat warpedFaceImage) {
 
 	// get mask
+	cv::Mat fsmask = cv::Mat(fsImage.rows,fsImage.cols, CV_8UC1);
+	fsmask = Scalar(0);
 
-	IplImage* fsMaskImage = Jrs::Ipl::Factory::createImageLike(fsImage, 1, 8, true, false);
-	iplSet(fsMaskImage, 0);
-
-	cv::Mat cvFsMaskImage = Jrs::OCV::Ipl::getMatFromIplImage(fsMaskImage, false);
-	cv::fillConvexPoly(cvFsMaskImage, fsPoints, 9, cv::Scalar(255));
+	cv::fillConvexPoly(fsmask, fsPoints, 9, cv::Scalar(255));
 	
-	cv::Mat cvMaskImage = Jrs::OCV::Ipl::getMatFromIplImage(maskImage, false);
-
-	CvSize sz = cvMaskImage.size();
+	CvSize sz = fsmask.size();
 	
-	cv::warpAffine(cvFsMaskImage, cvMaskImage, trafo, sz, cv::INTER_NEAREST, cv::BORDER_CONSTANT, cv::Scalar(0));
+	cv::warpAffine(fsmask, maskImage, trafo, sz, cv::INTER_NEAREST, cv::BORDER_CONSTANT, cv::Scalar(0));
 
 	// get face image
 
-	IplImage* faceCutout = Jrs::Ipl::Factory::createImageLike(fsImage, 3, 8, true, false);
+	cv::Mat faceCutout = fsImage.clone();
 
-	cv::Mat cvFaceCutout = Jrs::OCV::Ipl::getMatFromIplImage(faceCutout, false);
-	cv::Mat cvWarpedImage = Jrs::OCV::Ipl::getMatFromIplImage(warpedFaceImage, false);
-	cv::Mat cvFsImage = Jrs::OCV::Ipl::getMatFromIplImage(fsImage, false);
+	fsImage.copyTo(faceCutout, fsmask);
 
-	cvFsImage.copyTo(cvFaceCutout, cvFsMaskImage);
+	cv::warpAffine(faceCutout, warpedFaceImage, trafo, sz, cv::INTER_NEAREST, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
 
-	cv::warpAffine(cvFaceCutout, cvWarpedImage, trafo, sz, cv::INTER_NEAREST, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
-
-	Jrs::Ipl::Factory::deleteImage(fsMaskImage);
-	Jrs::Ipl::Factory::deleteImage(faceCutout);
 
 
 }
 	
 
-void FaceSwapping::colorCorrect(IplImage* src, IplImage* warped, IplImage* maskImg, DetectionRegion* dr)
+void FaceSwapping::colorCorrect(cv::Mat src, cv::Mat warped, cv::Mat maskImg, DetectionRegion* dr)
 {
 	uint8_t LUT[3][256];
 	int source_hist_int[3][256];
@@ -208,13 +158,9 @@ void FaceSwapping::colorCorrect(IplImage* src, IplImage* warped, IplImage* maskI
 	dr->getBoundingBox(x, y, w, h);
 	cv::Rect rect = cv::Rect(x, y, w, h);
 
-	cv::Mat cvSrc = Jrs::OCV::Ipl::getMatFromIplImage(src, false);
-	cv::Mat cvWarped = Jrs::OCV::Ipl::getMatFromIplImage(warped, false);
-	cv::Mat cvMask = Jrs::OCV::Ipl::getMatFromIplImage(maskImg, false);
-
-	cv::Mat source_image = cvSrc(rect);
-	cv::Mat target_image = cvWarped(rect);
-	cv::Mat mask = cvMask(rect);
+	cv::Mat source_image = src(rect);
+	cv::Mat target_image = warped(rect);
+	cv::Mat mask = mask(rect);
 
 	std::memset(source_hist_int, 0, sizeof(int) * 3 * 256);
 	std::memset(target_hist_int, 0, sizeof(int) * 3 * 256);
@@ -315,24 +261,20 @@ void FaceSwapping::colorCorrect(IplImage* src, IplImage* warped, IplImage* maskI
 
 
 
-inline void FaceSwapping::insertFaces(IplImage* dst, IplImage* warpedFace, IplImage* maskImage, cv::Size& feather)
+inline void FaceSwapping::insertFaces(cv::Mat dst, cv::Mat warpedFace, cv::Mat mask, cv::Size& feather)
 {
 
-	cv::Mat cvDst = Jrs::OCV::Ipl::getMatFromIplImage(dst, false);
-	cv::Mat cvWarped = Jrs::OCV::Ipl::getMatFromIplImage(warpedFace, false);
-	cv::Mat cvMask = Jrs::OCV::Ipl::getMatFromIplImage(maskImage, false);
+	cv::erode(mask, mask, getStructuringElement(cv::MORPH_RECT, feather), cv::Point(-1, -1), 1, cv::BORDER_CONSTANT, cv::Scalar(0));
 
-	cv::erode(cvMask, cvMask, getStructuringElement(cv::MORPH_RECT, feather), cv::Point(-1, -1), 1, cv::BORDER_CONSTANT, cv::Scalar(0));
+	cv::blur(mask, mask, feather, cv::Point(-1, -1), cv::BORDER_CONSTANT);
 
-	cv::blur(cvMask, cvMask, feather, cv::Point(-1, -1), cv::BORDER_CONSTANT);
-
-	for (size_t i = 0; i < cvDst.rows; i++)
+	for (size_t i = 0; i < dst.rows; i++)
 	{
-		auto frame_pixel = cvDst.row(i).data;
-		auto faces_pixel = cvWarped.row(i).data;
-		auto masks_pixel = cvMask.row(i).data;
+		auto frame_pixel = dst.row(i).data;
+		auto faces_pixel = warpedFace.row(i).data;
+		auto masks_pixel = mask.row(i).data;
 
-		for (size_t j = 0; j < cvDst.cols; j++)
+		for (size_t j = 0; j < dst.cols; j++)
 		{
 			if (*masks_pixel != 0)
 			{
@@ -352,11 +294,8 @@ inline void FaceSwapping::insertFaces(IplImage* dst, IplImage* warpedFace, IplIm
 // OpenCV with triangulation 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-void FaceSwapping::swapFacesTriangulated(IplImage* src, IplImage* dst, IplImage* faceSet, DetectionRegion* srcRegion, DetectionRegion* fsRegion){
+void FaceSwapping::swapFacesTriangulated(cv::Mat src, cv::Mat dst, cv::Mat faceSet, DetectionRegion* srcRegion, DetectionRegion* fsRegion){
 
-	cv::Mat cvSrc = Jrs::OCV::Ipl::getMatFromIplImage(src, false);
-	cv::Mat cvFs = Jrs::OCV::Ipl::getMatFromIplImage(faceSet, false);
-	cv::Mat output = Jrs::OCV::Ipl::getMatFromIplImage(dst, false);
 
 	face::FacemarkKazemi::Params params;
 	Ptr<face::FacemarkKazemi> facemark = face::FacemarkKazemi::create(params);
@@ -366,8 +305,8 @@ void FaceSwapping::swapFacesTriangulated(IplImage* src, IplImage* dst, IplImage*
 	std::vector<Rect> faces1, faces2;
 	std::vector< std::vector<Point2f> > shape1, shape2;
 
-	Mat img1 = cvFs.clone();
-	Mat img2 = cvSrc.clone();
+	Mat img1 = faceSet.clone();
+	Mat img2 = src.clone();
 	Mat img1Warped = img2.clone();
 
 	facemark->setFaceDetector((face::FN_FaceDetector)FaceSwapping::reuseDetections, fsRegion);
@@ -424,8 +363,10 @@ void FaceSwapping::swapFacesTriangulated(IplImage* src, IplImage* dst, IplImage*
 	Rect r = boundingRect(boundary_image2);
 	Point center = (r.tl() + r.br()) / 2;
 
+	cv::Mat output = dst.clone();
+
 	img1Warped.convertTo(img1Warped, CV_8UC3);
-	seamlessClone(img1Warped, output, mask, center, output, NORMAL_CLONE);
+	seamlessClone(img1Warped, dst, mask, center, output, NORMAL_CLONE);
 
 
 }
