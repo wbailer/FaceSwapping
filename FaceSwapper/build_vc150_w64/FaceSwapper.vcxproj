@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{50DB3286-8C24-3DF7-A757-EEF6687D090B}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>FaceSwapper</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\project\common\applications\FaceSwapper\bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">FaceSwapper.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">FaceSwapper1.0_w64_vc150d</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\project\common\applications\FaceSwapper\bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">FaceSwapper.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">FaceSwapper1.0_w64_vc150</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\include;D:\project\common\3rdparty\vc141_x64\dlib\19.12.0-Cuda91\include;D:\project\common\3rdparty\vc141_x64\OpenCV\3.4.0-Cuda91\include;D:\project\common\3rdparty\vc141_x64\OpenCV\3.4.0-Cuda91\include\opencv_contrib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;JRS_ARCH64;HAVE_SSE;HAVE_SSE2;JRS_OS_ID=w64;JRS_OS_ID_STR="w64";JRS_LIBRARY_VER_MAJOR=1;JRS_LIBRARY_VER_MINOR=0;JRS_LIBRARY_VER_COMPOSED=VER_1_0;FACESWAPPER_EXPORTS;__SSE__;__SSE2__;__SSE3__;__SSSE3__;__SSE4_1__;__SSE4_2__;__AVX__;PION_HAVE_SSL;JRS_OPENCV_VERSION=34000;JRS_OPENCV_VERSION_MAJOR=3;JRS_OPENCV_VERSION_MINOR=4;_USRDLL;FaceSwapper_EXPORTS;NOMINMAX;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(OutDir)..\bin\$(TargetName).pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;JRS_ARCH64;HAVE_SSE;HAVE_SSE2;JRS_OS_ID=w64;JRS_OS_ID_STR=\"w64\";JRS_LIBRARY_VER_MAJOR=1;JRS_LIBRARY_VER_MINOR=0;JRS_LIBRARY_VER_COMPOSED=VER_1_0;FACESWAPPER_EXPORTS;__SSE__;__SSE2__;__SSE3__;__SSSE3__;__SSE4_1__;__SSE4_2__;__AVX__;PION_HAVE_SSL;JRS_OPENCV_VERSION=34000;JRS_OPENCV_VERSION_MAJOR=3;JRS_OPENCV_VERSION_MINOR=4;_USRDLL;FaceSwapper_EXPORTS;NOMINMAX;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\project\common\libs\Baselib3.0\include;D:\project\common\libs\IplBase3.0\include;D:\project\common\libs\IplWithIpp3.0\include;D:\project\common\libs\IplAlg3.0\include;D:\project\common\libs\IplJrs5.0\include;D:\project\common\libs\analysis\ObjectDetector3.0\include;D:\project\common\libs\JRSTrackingBase3.0\include;D:\project\common\libs\analysis\TrajectoryRegion3.0\include;D:\project\common\libs\JrsDlibBase2.0\include;D:\project\common\3rdparty\vc141_x64\Pion\5.0.6\include;D:\project\common\libs\analysis\TensorFlowFaceDetector2.2\include;D:\project\common\3rdparty\vc141_x64\dlib\19.12.0-Cuda91\include;D:\project\common\3rdparty\vc141_x64\OpenCV\3.4.0-Cuda91\include;D:\project\common\3rdparty\vc141_x64\OpenCV\3.4.0-Cuda91\include\opencv_contrib;D:\project\common\applications\FaceSwapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\project\common\libs\Baselib3.0\include;D:\project\common\libs\IplBase3.0\include;D:\project\common\libs\IplWithIpp3.0\include;D:\project\common\libs\IplAlg3.0\include;D:\project\common\libs\IplJrs5.0\include;D:\project\common\libs\analysis\ObjectDetector3.0\include;D:\project\common\libs\JRSTrackingBase3.0\include;D:\project\common\libs\analysis\TrajectoryRegion3.0\include;D:\project\common\libs\JrsDlibBase2.0\include;D:\project\common\3rdparty\vc141_x64\Pion\5.0.6\include;D:\project\common\libs\analysis\TensorFlowFaceDetector2.2\include;D:\project\common\3rdparty\vc141_x64\dlib\19.12.0-Cuda91\include;D:\project\common\3rdparty\vc141_x64\OpenCV\3.4.0-Cuda91\include;D:\project\common\3rdparty\vc141_x64\OpenCV\3.4.0-Cuda91\include\opencv_contrib;D:\project\common\applications\FaceSwapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>Calls the batch-files './post_build_hook' and/or '%COMMONPROJECT%/global_post_build_hook', if they exists</Message>
+      <Command>setlocal
+call D:\project\common\CMakeBuild\Scripts\AVM\makerelease_ext.bat D:\project\common\applications\FaceSwapper\ D:\project\common\applications\FaceSwapper1.0\ 1.0 /nodelete
+if %errorlevel% neq 0 goto :cmEnd
+if exist D:\project\common\applications\FaceSwapper\post_build_hook_baw.bat call D:\project\common\applications\FaceSwapper\post_build_hook_baw.bat w64
+if %errorlevel% neq 0 goto :cmEnd
+if exist D:\project\common\applications\FaceSwapper\tools_windows\post_build_hook_baw.bat call D:\project\common\applications\FaceSwapper\tools_windows\post_build_hook_baw.bat w64 vc150 NO_VARIANT_SET 1.0 FaceSwapper
+if %errorlevel% neq 0 goto :cmEnd
+if exist D:\project\common\CMakeBuild\Scripts\AVM\global_hooks\global_post_build_hook_baw.bat call D:\project\common\CMakeBuild\Scripts\AVM\global_hooks\global_post_build_hook_baw.bat FaceSwapper 1.0 D:\project\common\applications\FaceSwapper w64 vc150 $(SolutionDir) NO_VARIANT_SET 1.0 FaceSwapper
+if %errorlevel% neq 0 goto :cmEnd
+if exist D:\project\common\applications\FaceSwapper\post_build_hook.bat call D:\project\common\applications\FaceSwapper\post_build_hook.bat w64 vc150 NO_VARIANT_SET 1.0 FaceSwapper
+if %errorlevel% neq 0 goto :cmEnd
+if exist D:\project\common\applications\FaceSwapper\tools_windows\post_build_hook.bat call D:\project\common\applications\FaceSwapper\tools_windows\post_build_hook.bat w64 vc150 NO_VARIANT_SET
+if %errorlevel% neq 0 goto :cmEnd
+if exist D:\project\common\CMakeBuild\Scripts\AVM\global_hooks\global_post_build_hook.bat call D:\project\common\CMakeBuild\Scripts\AVM\global_hooks\global_post_build_hook.bat FaceSwapper 1.0 D:\project\common\applications\FaceSwapper w64 vc150 $(SolutionDir) NO_VARIANT_SET 1.0 FaceSwapper
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>dlib19.12.0_debug_64bit_msvc1911.lib;opencv_calib3d340d.lib;opencv_core340d.lib;opencv_features2d340d.lib;opencv_flann340d.lib;opencv_imgproc340d.lib;opencv_imgcodecs340d.lib;opencv_highgui340d.lib;opencv_ml340d.lib;opencv_video340d.lib;opencv_videoio340d.lib;opencv_face340d.lib;opencv_photo340d.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.1\lib\x64\cudart.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.1\lib\x64\cublas.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.1\lib\x64\cublas_device.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.1\lib\x64\curand.lib;cudnn.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.1\lib\x64\cusolver.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:/project/common/3rdparty/vc141_x64/dlib/19.12.0-Cuda91/lib;D:/project/common/3rdparty/vc141_x64/dlib/19.12.0-Cuda91/lib/$(Configuration);D:/project/common/3rdparty/vc141_x64/OpenCV/3.4.0-Cuda91/lib;D:/project/common/3rdparty/vc141_x64/OpenCV/3.4.0-Cuda91/lib/$(Configuration);D:/project/common/3rdparty/vc141_x64/CUDNN/7.1.3/lib/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64 bcrypt.lib</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/project/common/applications/FaceSwapper/lib/Debug/../FaceSwapper1.0_w64_vc150d.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/project/common/applications/FaceSwapper/bin/Debug/../FaceSwapper1.0_w64_vc150d.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\include;D:\project\common\3rdparty\vc141_x64\dlib\19.12.0-Cuda91\include;D:\project\common\3rdparty\vc141_x64\OpenCV\3.4.0-Cuda91\include;D:\project\common\3rdparty\vc141_x64\OpenCV\3.4.0-Cuda91\include\opencv_contrib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Release/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>Custom</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;JRS_ARCH64;HAVE_SSE;HAVE_SSE2;JRS_OS_ID=w64;JRS_OS_ID_STR="w64";JRS_LIBRARY_VER_MAJOR=1;JRS_LIBRARY_VER_MINOR=0;JRS_LIBRARY_VER_COMPOSED=VER_1_0;FACESWAPPER_EXPORTS;__SSE__;__SSE2__;__SSE3__;__SSSE3__;__SSE4_1__;__SSE4_2__;__AVX__;PION_HAVE_SSL;JRS_OPENCV_VERSION=34000;JRS_OPENCV_VERSION_MAJOR=3;JRS_OPENCV_VERSION_MINOR=4;_USRDLL;FaceSwapper_EXPORTS;NOMINMAX;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(OutDir)..\bin\$(TargetName).pdb</ProgramDataBaseFileName>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;JRS_ARCH64;HAVE_SSE;HAVE_SSE2;JRS_OS_ID=w64;JRS_OS_ID_STR=\"w64\";JRS_LIBRARY_VER_MAJOR=1;JRS_LIBRARY_VER_MINOR=0;JRS_LIBRARY_VER_COMPOSED=VER_1_0;FACESWAPPER_EXPORTS;__SSE__;__SSE2__;__SSE3__;__SSSE3__;__SSE4_1__;__SSE4_2__;__AVX__;PION_HAVE_SSL;JRS_OPENCV_VERSION=34000;JRS_OPENCV_VERSION_MAJOR=3;JRS_OPENCV_VERSION_MINOR=4;_USRDLL;FaceSwapper_EXPORTS;NOMINMAX;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\project\common\libs\Baselib3.0\include;D:\project\common\libs\IplBase3.0\include;D:\project\common\libs\IplWithIpp3.0\include;D:\project\common\libs\IplAlg3.0\include;D:\project\common\libs\IplJrs5.0\include;D:\project\common\libs\analysis\ObjectDetector3.0\include;D:\project\common\libs\JRSTrackingBase3.0\include;D:\project\common\libs\analysis\TrajectoryRegion3.0\include;D:\project\common\libs\JrsDlibBase2.0\include;D:\project\common\3rdparty\vc141_x64\Pion\5.0.6\include;D:\project\common\libs\analysis\TensorFlowFaceDetector2.2\include;D:\project\common\3rdparty\vc141_x64\dlib\19.12.0-Cuda91\include;D:\project\common\3rdparty\vc141_x64\OpenCV\3.4.0-Cuda91\include;D:\project\common\3rdparty\vc141_x64\OpenCV\3.4.0-Cuda91\include\opencv_contrib;D:\project\common\applications\FaceSwapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\project\common\libs\Baselib3.0\include;D:\project\common\libs\IplBase3.0\include;D:\project\common\libs\IplWithIpp3.0\include;D:\project\common\libs\IplAlg3.0\include;D:\project\common\libs\IplJrs5.0\include;D:\project\common\libs\analysis\ObjectDetector3.0\include;D:\project\common\libs\JRSTrackingBase3.0\include;D:\project\common\libs\analysis\TrajectoryRegion3.0\include;D:\project\common\libs\JrsDlibBase2.0\include;D:\project\common\3rdparty\vc141_x64\Pion\5.0.6\include;D:\project\common\libs\analysis\TensorFlowFaceDetector2.2\include;D:\project\common\3rdparty\vc141_x64\dlib\19.12.0-Cuda91\include;D:\project\common\3rdparty\vc141_x64\OpenCV\3.4.0-Cuda91\include;D:\project\common\3rdparty\vc141_x64\OpenCV\3.4.0-Cuda91\include\opencv_contrib;D:\project\common\applications\FaceSwapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>Calls the batch-files './post_build_hook' and/or '%COMMONPROJECT%/global_post_build_hook', if they exists</Message>
+      <Command>setlocal
+call D:\project\common\CMakeBuild\Scripts\AVM\makerelease_ext.bat D:\project\common\applications\FaceSwapper\ D:\project\common\applications\FaceSwapper1.0\ 1.0 /nodelete
+if %errorlevel% neq 0 goto :cmEnd
+if exist D:\project\common\applications\FaceSwapper\post_build_hook_baw.bat call D:\project\common\applications\FaceSwapper\post_build_hook_baw.bat w64
+if %errorlevel% neq 0 goto :cmEnd
+if exist D:\project\common\applications\FaceSwapper\tools_windows\post_build_hook_baw.bat call D:\project\common\applications\FaceSwapper\tools_windows\post_build_hook_baw.bat w64 vc150 NO_VARIANT_SET 1.0 FaceSwapper
+if %errorlevel% neq 0 goto :cmEnd
+if exist D:\project\common\CMakeBuild\Scripts\AVM\global_hooks\global_post_build_hook_baw.bat call D:\project\common\CMakeBuild\Scripts\AVM\global_hooks\global_post_build_hook_baw.bat FaceSwapper 1.0 D:\project\common\applications\FaceSwapper w64 vc150 $(SolutionDir) NO_VARIANT_SET 1.0 FaceSwapper
+if %errorlevel% neq 0 goto :cmEnd
+if exist D:\project\common\applications\FaceSwapper\post_build_hook.bat call D:\project\common\applications\FaceSwapper\post_build_hook.bat w64 vc150 NO_VARIANT_SET 1.0 FaceSwapper
+if %errorlevel% neq 0 goto :cmEnd
+if exist D:\project\common\applications\FaceSwapper\tools_windows\post_build_hook.bat call D:\project\common\applications\FaceSwapper\tools_windows\post_build_hook.bat w64 vc150 NO_VARIANT_SET
+if %errorlevel% neq 0 goto :cmEnd
+if exist D:\project\common\CMakeBuild\Scripts\AVM\global_hooks\global_post_build_hook.bat call D:\project\common\CMakeBuild\Scripts\AVM\global_hooks\global_post_build_hook.bat FaceSwapper 1.0 D:\project\common\applications\FaceSwapper w64 vc150 $(SolutionDir) NO_VARIANT_SET 1.0 FaceSwapper
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>Version.lib;dlib19.12.0_release_64bit_msvc1911.lib;opencv_calib3d340.lib;opencv_core340.lib;opencv_features2d340.lib;opencv_flann340.lib;opencv_imgproc340.lib;opencv_imgcodecs340.lib;opencv_highgui340.lib;opencv_ml340.lib;opencv_video340.lib;opencv_videoio340.lib;opencv_face340.lib;opencv_photo340.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.1\lib\x64\cudart.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.1\lib\x64\cublas.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.1\lib\x64\cublas_device.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.1\lib\x64\curand.lib;cudnn.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.1\lib\x64\cusolver.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:/project/common/3rdparty/vc141_x64/dlib/19.12.0-Cuda91/lib;D:/project/common/3rdparty/vc141_x64/dlib/19.12.0-Cuda91/lib/$(Configuration);D:/project/common/3rdparty/vc141_x64/OpenCV/3.4.0-Cuda91/lib;D:/project/common/3rdparty/vc141_x64/OpenCV/3.4.0-Cuda91/lib/$(Configuration);D:/project/common/3rdparty/vc141_x64/CUDNN/7.1.3/lib/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64 bcrypt.lib</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/project/common/applications/FaceSwapper/lib/Release/../FaceSwapper1.0_w64_vc150.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/project/common/applications/FaceSwapper/bin/Release/../FaceSwapper1.0_w64_vc150.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\DetectionRegion.cpp" />
+    <ClCompile Include="..\src\DlibFaceDetector.cpp" />
+    <ClCompile Include="..\src\FaceDetectionRegion.cpp" />
+    <ClCompile Include="D:\project\common\applications\FaceSwapper\src\FaceSwapper.cpp" />
+    <ClCompile Include="D:\project\common\applications\FaceSwapper\src\FaceSwapping.cpp" />
+    <ClInclude Include="..\include\DetectionRegion.h" />
+    <ClInclude Include="..\include\dlib\DlibFaceDetector.h" />
+    <ClInclude Include="..\include\dlib\dlib_image_hull_ipl.h" />
+    <ClInclude Include="..\include\dlib\ipl_image_hull.h" />
+    <ClInclude Include="..\include\FaceDetectionRegion.h" />
+    <ClInclude Include="..\include\FaceSwapper\FaceSwapping.h" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
