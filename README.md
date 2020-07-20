@@ -32,4 +32,11 @@ Models:
 
 ## Face swapping
 
-The code in `tbd` is a standalone C++ application (project for MSVC 2017 is provided). 
+The code in `FaceSwapper` is a standalone C++ application (project for MSVC 2017 is provided). Due the license issues, the face detector used in the papers has been replaced with the NN-based one from Dlib.
+
+Dependencies (could be built against different but compatible versions):
+- Dlib 19.12
+- OpenCV 3.4
+- CUDA Toolkit 9.1
+- CuDNN 7.1.3
+
