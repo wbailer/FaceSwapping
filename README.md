@@ -8,7 +8,7 @@ This page contains code related to the following two papers:
 
 - Bailer, Werner, and Martin Winter. "On Improving Face Generation for Privacy Preservation." 2019 International Conference on Content-Based Multimedia Indexing (CBMI). IEEE, 2019. [PDF](https://www.projectmarconi.eu/s/facegen.pdf)
 
-The pipeline contains of the follwing steps:
+The pipeline consists of the follwing steps:
 
 - (optional) segmentation of training data of the GAN
 - GAN for generating a set of faces to be used for replacement
