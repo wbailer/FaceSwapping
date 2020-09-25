@@ -1,5 +1,5 @@
 Pillow
 requests
-tensorflow-gpu==1.6
+tensorflow-gpu==1.15.4
 numpy
 scipy
